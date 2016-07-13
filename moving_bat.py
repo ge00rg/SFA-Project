@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import matplotlib.patches as patches
+import geometry as geo
 
 ### ### Here be the realm of all variables global ### ###
 ROOMWIDTH = 3                    #width of the room
@@ -126,6 +127,30 @@ def generate_sensors(n=2, direction='random'):
 		 
 	else:
 		print('Wrong directions keyword')
+		
+def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH): 
+
+	p1=pos
+	sensors_p2=[(pos[0]+sensors[i, 0],pos[1]+sensors[i, 1]) for i in range(sensors.shape[1])] 
+	walls_p3=[(0,0), (0,0), (0,length), (width,length)] 
+	walls_p4=[(width,0), (0,length), (width,length), (width,0)]
+	
+	distances=np.zeros((len(sensors_p2), len(walls_p3)))
+
+	for i in range(len(sensors_p2)): 
+		for j in range(len(walls_p3)):
+			
+			print(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+			intersect= geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+
+			if not intersect: 
+				distances[i, j]= -1
+			else:
+				dist= np.linalg.norm(np.array(pos)-np.array(intersect))
+				distances[i, j]= dist
+	return distances	
+	
+	
 		
 
 
