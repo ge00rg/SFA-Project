@@ -6,7 +6,7 @@ import matplotlib.patches as patches
 
 ### ### Here be the realm of all variables global ### ###
 ROOMWIDTH = 3                    #width of the room
-ROOMLENGTH = 2                   #lenth of room
+ROOMLENGTH = 2                   #length of room
 
 T = 1500                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
@@ -31,7 +31,7 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
     '''
     width: int, width of the room.
     length: int, length of the room.
-    maxspeed: int, maximum distance to move in one timestep.
+    maxspeed: float, maximum distance to move in one timestep.
     n_t: int, number of timesteps.
     ival: int, each ival timesteps, a new direction vector is chosen and in between two
         such vectors, we interpoate.
