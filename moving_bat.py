@@ -88,25 +88,23 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
             traj[t] = traj[t-1] + vs[t-1]
     #adding elements of vs to trajectory at every timestep, morroring everything in the future
     #if conditions are met
-
     return traj
 
-### ### Here be tests ### ###
-a = make_trajectory()
-print(a)
+def plot_trajectory():
+    a = make_trajectory()
 
-fig = plt.figure()
-ax = fig.add_subplot(111, aspect='equal')
-ax.add_patch(
-    patches.Rectangle(
-        (0, 0),
-        ROOMWIDTH,
-        ROOMLENGTH,
-        fill=False      # remove background
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
+    ax.add_patch(
+        patches.Rectangle(
+            (0, 0),
+            ROOMWIDTH,
+            ROOMLENGTH,
+            fill=False      # remove background
+        )
     )
-)
-ax.plot(a[:,0],a[:,1])
-ax.scatter(a[0,0], a[0,1])
-ax.set_xlim([-0.2,ROOMWIDTH+0.2])
-ax.set_ylim([-0.2,ROOMLENGTH+0.2])
-plt.show()
+    ax.plot(a[:,0],a[:,1])
+    ax.scatter(a[0,0], a[0,1])
+    ax.set_xlim([-0.2,ROOMWIDTH+0.2])
+    ax.set_ylim([-0.2,ROOMLENGTH+0.2])
+    plt.show()
