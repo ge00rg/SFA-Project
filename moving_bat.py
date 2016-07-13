@@ -126,8 +126,9 @@ def test_sonar(pos):
     plt.scatter(pos[0], pos[1])
     
     sensors = generate_sensors(3)
+    son = sonar((1,1),sensors)
     for i in range(sensors.shape[1]):
-        plt.plot([pos[0], pos[0] + sensors[0,i]], [pos[1], pos[1] + sensors[1,i]])
+        plt.plot([pos[0], pos[0] + sensors[0,i]*son[i,0]], [pos[1], pos[1] + sensors[1,i]*son[i,0]])
 
     print(sonar((1,1), sensors))
 
@@ -135,33 +136,53 @@ def test_sonar(pos):
 
 
 def generate_sensors(n=2, direction='random'):
-	sensors = np.array((n,2))
+    '''
+    n: int, number of desired sensors
+    direction: 'random' or 'orthogonal', 'random' creates n random sensors, while
+        'orthogonal creates two sensors orthogonal to the walls
+
+    returns: 2xn array, where each column holds a sensor vector.
+    '''
+    sensors = np.array((n,2))
 	
-	if direction == 'orthogonal': 
-		assert(n==2)
+    if direction == 'orthogonal': 
+        assert(n == 2)
 		
-		return np.array([[1,0], [0,1]])
+        return np.array([[1,0], [0,1]])
 		
-	elif direction == 'random': 
-		 angles = np.random.uniform(0, 2*np.pi, n)
-		 sensors = np.array([np.cos(angles), np.sin(angles)])
+    elif direction == 'random': 
+        angles = np.random.uniform(0, 2*np.pi, n)
+        sensors = np.array([np.cos(angles), np.sin(angles)])
 		 
-		 return sensors
+        return sensors
 		 
-	else:
-		print('Wrong directions keyword')
+    else:
+        print('Wrong directions keyword')
 		
 def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH): 
+    '''
+    pos: tuple of floats, signifies the position from which distances are computed
+    sensors: 2xn array of sensors as created by generate_sensors
 
+    returns: nx2 array, where the first column holds the distaces according to 
+        each of the sensors, the second one the index of the wall the distance is measured to.
+    '''
+    #creating the points for the intersection
     p1 = pos
+    #tuple
     sensors_p2 = [(pos[0]+sensors[0, i],pos[1]+sensors[1, i]) for i in range(sensors.shape[1])] 
+    #list of tuples
     walls_p3 = [(0,0), (0,0), (0,length), (width,length)] 
+    #list of tuples
     walls_p4 = [(width,0), (0,length), (width,length), (width,0)]
+    #list of tuples
 	
     #distances = np.zeros((len(sensors_p2), len(walls_p3)))
     #old distances array
 
     distances = np.zeros((sensors.shape[1], 2))
+    #one distance per sensor, plus the integer corresponding to the wall the 
+    #distance is measured from
 
     for i in range(len(sensors_p2)):
         target_walls = []
@@ -185,8 +206,11 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
             else:
                 dist = np.linalg.norm(np.array(pos) - np.array(intersect))
                 distances_temp[k] = [dist, j]
+        #compute the distances to all of these walls
+
         distances[i,0] = np.nanmin(distances_temp[:,0])
         distances[i,1] = distances_temp[np.nanargmin(distances_temp[:,0]),1]
+        #take the minimum
 
         ### ### ### old version ### ### ###
         #for j in range(len(walls_p3)):
@@ -200,7 +224,6 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
         #        dist= np.linalg.norm(np.array(pos)-np.array(intersect))
         #        distances[i, j]= dist
     
-    print('ada:', distances)
     return distances	
 	
 	
