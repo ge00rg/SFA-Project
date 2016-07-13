@@ -158,32 +158,49 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
     walls_p3 = [(0,0), (0,0), (0,length), (width,length)] 
     walls_p4 = [(width,0), (0,length), (width,length), (width,0)]
 	
-    distances = np.zeros((len(sensors_p2), len(walls_p3)))
+    #distances = np.zeros((len(sensors_p2), len(walls_p3)))
+    #old distances array
+
+    distances = np.zeros((sensors.shape[1], 2))
 
     for i in range(len(sensors_p2)):
         target_walls = []
         if sensors[0,i] > 0:
-            target_walls.append('west')
+            target_walls.append(WALLSDICT['west'])
         if sensors[0,i] < 0:
-            target_walls.append('east')
+            target_walls.append(WALLSDICT['east'])
         if sensors[1,i] > 0:
-            target_walls.append('north')
+            target_walls.append(WALLSDICT['north'])
         if sensors[1,i] < 0:
-            target_walls.append('south')
+            target_walls.append(WALLSDICT['south'])
         #We check which walls lie in the direction of the sensor
-
-        print(target_walls)
-
-        for j in range(len(walls_p3)):
-			
-            print(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
-            intersect= geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+        
+        distances_temp = np.zeros((len(target_walls), 2))
+        
+        for k, j in enumerate(target_walls):	
+            intersect = geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
 
             if not intersect: 
-                distances[i, j]= -1
+                distances_temp[k] = [np.nan, j]
             else:
-                dist= np.linalg.norm(np.array(pos)-np.array(intersect))
-                distances[i, j]= dist
+                dist = np.linalg.norm(np.array(pos) - np.array(intersect))
+                distances_temp[k] = [dist, j]
+        distances[i,0] = np.nanmin(distances_temp[:,0])
+        distances[i,1] = distances_temp[np.nanargmin(distances_temp[:,0]),1]
+
+        ### ### ### old version ### ### ###
+        #for j in range(len(walls_p3)):
+        #	
+        #    print(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+        #    intersect= geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+        #
+        #    if not intersect: 
+        #        distances[i, j]= -1
+        #    else:
+        #        dist= np.linalg.norm(np.array(pos)-np.array(intersect))
+        #        distances[i, j]= dist
+    
+    print('ada:', distances)
     return distances	
 	
 	
