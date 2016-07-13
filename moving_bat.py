@@ -108,3 +108,31 @@ def plot_trajectory():
     ax.set_xlim([-0.2,ROOMWIDTH+0.2])
     ax.set_ylim([-0.2,ROOMLENGTH+0.2])
     plt.show()
+
+
+def generate_sensors(n=2, direction='random'):
+	sensors = np.array((n,2))
+	
+	if direction == 'orthogonal': 
+		assert(n==2)
+		
+		return np.array([[1,0], [0,1]])
+		
+	elif direction == 'random': 
+		 angles = np.random.uniform(0, 2*np.pi, n)
+		 sensors = np.array([np.cos(angles), np.sin(angles)])
+		 
+		 return sensors
+		 
+	else:
+		print('Wrong directions keyword')
+		
+
+
+
+
+
+
+
+
+
