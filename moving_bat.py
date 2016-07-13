@@ -94,6 +94,9 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
     return traj
 
 def plot_trajectory():
+    '''
+    Plots a random trajectory.
+    '''
     a = make_trajectory()
 
     fig = plt.figure()
