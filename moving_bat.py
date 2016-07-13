@@ -52,8 +52,8 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
         print('Put assert statement here if this ever gets used!')
     #make random starting point, unless one is specified
 
-    phi_arr = np.random.uniform(0, 2*np.pi, n_t/ival)
-    r_arr = np.random.uniform(0, maxspeed, n_t/ival)
+    phi_arr = np.random.uniform(0, 2*np.pi, int(n_t/ival))
+    r_arr = np.random.uniform(0, maxspeed, int(n_t/ival))
     #generate n_t/ival vectors in polar coordinates (easier to maintain normalization that way)
 
     x_arr = r_arr*np.cos(phi_arr)
