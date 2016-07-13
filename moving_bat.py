@@ -13,7 +13,9 @@ T = 1500                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
 MAXSPEED = 0.05                  #maximum speed of the bat      
-TRDIST=0.05                      #distance at which the mirroring is triggered. Corrently not in use        
+TRDIST = 0.05                      #distance at which the mirroring is triggered. Corrently not in use
+
+WALLSDICT = {0:'south', 1:'east', 2:'north', 3:'west', 'south':0, 'east':1, 'north':2, 'west':3}
 
 ### ### Here liveth the heart of the program ### ###
 def get_distances(x, y, width=ROOMWIDTH, length=ROOMLENGTH):
@@ -110,6 +112,27 @@ def plot_trajectory():
     ax.set_ylim([-0.2,ROOMLENGTH+0.2])
     plt.show()
 
+def test_sonar(pos):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
+    ax.add_patch(
+        patches.Rectangle(
+            (0, 0),
+            ROOMWIDTH,
+            ROOMLENGTH,
+            fill=False      # remove background
+        )
+    )
+    plt.scatter(pos[0], pos[1])
+    
+    sensors = generate_sensors(3)
+    for i in range(sensors.shape[1]):
+        plt.plot([pos[0], pos[0] + sensors[0,i]], [pos[1], pos[1] + sensors[1,i]])
+
+    print(sonar((1,1), sensors))
+
+    plt.show()
+
 
 def generate_sensors(n=2, direction='random'):
 	sensors = np.array((n,2))
@@ -130,25 +153,38 @@ def generate_sensors(n=2, direction='random'):
 		
 def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH): 
 
-	p1=pos
-	sensors_p2=[(pos[0]+sensors[i, 0],pos[1]+sensors[i, 1]) for i in range(sensors.shape[1])] 
-	walls_p3=[(0,0), (0,0), (0,length), (width,length)] 
-	walls_p4=[(width,0), (0,length), (width,length), (width,0)]
+    p1 = pos
+    sensors_p2 = [(pos[0]+sensors[0, i],pos[1]+sensors[1, i]) for i in range(sensors.shape[1])] 
+    walls_p3 = [(0,0), (0,0), (0,length), (width,length)] 
+    walls_p4 = [(width,0), (0,length), (width,length), (width,0)]
 	
-	distances=np.zeros((len(sensors_p2), len(walls_p3)))
+    distances = np.zeros((len(sensors_p2), len(walls_p3)))
 
-	for i in range(len(sensors_p2)): 
-		for j in range(len(walls_p3)):
+    for i in range(len(sensors_p2)):
+        target_walls = []
+        if sensors[0,i] > 0:
+            target_walls.append('west')
+        if sensors[0,i] < 0:
+            target_walls.append('east')
+        if sensors[1,i] > 0:
+            target_walls.append('north')
+        if sensors[1,i] < 0:
+            target_walls.append('south')
+        #We check which walls lie in the direction of the sensor
+
+        print(target_walls)
+
+        for j in range(len(walls_p3)):
 			
-			print(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
-			intersect= geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+            print(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
+            intersect= geo.getIntersectPoint(p1, sensors_p2[i], walls_p3[j], walls_p4[j])
 
-			if not intersect: 
-				distances[i, j]= -1
-			else:
-				dist= np.linalg.norm(np.array(pos)-np.array(intersect))
-				distances[i, j]= dist
-	return distances	
+            if not intersect: 
+                distances[i, j]= -1
+            else:
+                dist= np.linalg.norm(np.array(pos)-np.array(intersect))
+                distances[i, j]= dist
+    return distances	
 	
 	
 		
