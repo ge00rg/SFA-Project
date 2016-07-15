@@ -4,7 +4,7 @@ import numpy as np
 #mb.plot_trajectory()
 
 #sen1=mb.generate_sensors()
-sen2=mb.generate_sensors(2,'orthogonal')
+#sen2=mb.generate_sensors(2,'orthogonal')
 #sen3=mb.generate_sensors(3,'orthogonal')
 #sen4=mb.generate_sensors(5)
 #sen5=mb.generate_sensors(3,'test')
@@ -17,5 +17,7 @@ sen2=mb.generate_sensors(2,'orthogonal')
 #print('arg=3, test', sen5)
 
 
-print(mb.sonar((1,1), sen2))
+#print(mb.sonar((1,1), sen2))
+
+mb.test_sonar((1,1))
 
