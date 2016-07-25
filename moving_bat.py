@@ -94,6 +94,22 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
     #if conditions are met
     return traj
 
+def sensory_data(traj, n=2, direction='random'):
+    '''
+    traj: trajectory as returned by make_trajectory
+    n: int, number of sensors
+    direction: 'random' or 'orthogonal'
+
+    returns: ndarray(txn) containing the sensory data obtained from traj sensory data 
+    '''
+    sensors = generate_sensors(n=n, direction=direction)
+
+    sen_data = np.zeros((traj.shape[0], n))
+    for t in range(traj.shape[0]):
+        sen_data[t] = sonar(tuple(traj[t]), sensors)[:,0]
+
+    return sen_data
+
 def plot_trajectory():
     '''
     Plots a random trajectory.
