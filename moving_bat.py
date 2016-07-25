@@ -13,6 +13,7 @@ T = 1500                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
 MAXSPEED = 0.05                  #maximum speed of the bat      
+MINSPEED = 0.005                 #minimum speed of the bat
 TRDIST = 0.05                      #distance at which the mirroring is triggered. Corrently not in use
 
 WALLSDICT = {0:'south', 1:'east', 2:'north', 3:'west', 'south':0, 'east':1, 'north':2, 'west':3}
@@ -29,7 +30,7 @@ def get_distances(x, y, width=ROOMWIDTH, length=ROOMLENGTH):
     '''
     return x, width-x, y, length-y
 
-def make_trajectory(width=ROOMWIDTH, length=ROOMLENGTH, maxspeed=MAXSPEED, n_t=T, ival=DIRINTERVAL,
+def make_trajectory(width=ROOMWIDTH, length=ROOMLENGTH, minspeed=MINSPEED, maxspeed=MAXSPEED, n_t=T, ival=DIRINTERVAL,
 interpolation='linear', trigger_distance=TRDIST, init=None):
     '''
     width: int, width of the room.
@@ -56,7 +57,7 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
     #make random starting point, unless one is specified
 
     phi_arr = np.random.uniform(0, 2*np.pi, int(n_t/ival))
-    r_arr = np.random.uniform(0, maxspeed, int(n_t/ival))
+    r_arr = np.random.uniform(minspeed, maxspeed, int(n_t/ival))
     #generate n_t/ival vectors in polar coordinates (easier to maintain normalization that way)
 
     x_arr = r_arr*np.cos(phi_arr)
