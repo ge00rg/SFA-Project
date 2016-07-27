@@ -94,7 +94,7 @@ interpolation='linear', trigger_distance=TRDIST, init=None):
     #if conditions are met
     return traj
 
-def sensory_data(traj, n=2, direction='random'):
+def sensory_data(traj, sensors):
     '''
     traj: trajectory as returned by make_trajectory
     n: int, number of sensors
@@ -102,19 +102,16 @@ def sensory_data(traj, n=2, direction='random'):
 
     returns: ndarray(txn) containing the sensory data obtained from traj sensory data 
     '''
-    sensors = generate_sensors(n=n, direction=direction)
-
-    sen_data = np.zeros((traj.shape[0], n))
+    sen_data = np.zeros((traj.shape[0], sensors.shape[1]))
     for t in range(traj.shape[0]):
-        sen_data[t] = sonar(tuple(traj[t]), sensors)[:,0]
+        sen_data[t] = sonar(traj[t], sensors)[:,0]
 
     return sen_data
 
-def plot_trajectory():
+def plot_trajectory(traj):
     '''
     Plots a random trajectory.
     '''
-    a = make_trajectory()
 
     fig = plt.figure()
     ax = fig.add_subplot(111, aspect='equal')
@@ -126,8 +123,9 @@ def plot_trajectory():
             fill=False      # remove background
         )
     )
-    ax.plot(a[:,0],a[:,1])
-    ax.scatter(a[0,0], a[0,1])
+    ax.plot(traj[:,0],traj[:,1])
+    ax.scatter(traj[0, 0], traj[0, 1])
+    ax.scatter(traj[-1,0], traj[-1, 1], color='r')
     ax.set_xlim([-0.2,ROOMWIDTH+0.2])
     ax.set_ylim([-0.2,ROOMLENGTH+0.2])
     plt.show()
@@ -146,11 +144,10 @@ def test_sonar(pos):
     plt.scatter(pos[0], pos[1])
     
     sensors = generate_sensors(3)
-    son = sonar((1,1),sensors)
+    son = sonar(pos, sensors)
     for i in range(sensors.shape[1]):
         plt.plot([pos[0], pos[0] + sensors[0,i]*son[i,0]], [pos[1], pos[1] + sensors[1,i]*son[i,0]])
 
-    print(sonar((1,1), sensors))
 
     plt.show()
 
@@ -181,14 +178,14 @@ def generate_sensors(n=2, direction='random'):
 		
 def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH): 
     '''
-    pos: tuple of floats, signifies the position from which distances are computed
+    pos: array or list, signifies the position from which distances are computed
     sensors: 2xn array of sensors as created by generate_sensors
 
     returns: nx2 array, where the first column holds the distaces according to 
         each of the sensors, the second one the index of the wall the distance is measured to.
     '''
     #creating the points for the intersection
-    p1 = pos
+    p1 = tuple(pos)
     #tuple
     sensors_p2 = [(pos[0]+sensors[0, i],pos[1]+sensors[1, i]) for i in range(sensors.shape[1])] 
     #list of tuples
