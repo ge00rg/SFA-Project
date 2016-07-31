@@ -124,10 +124,11 @@ def plot_trajectory(traj):
         )
     )
     ax.plot(traj[:,0],traj[:,1])
-    ax.scatter(traj[0, 0], traj[0, 1])
-    ax.scatter(traj[-1,0], traj[-1, 1], color='r')
+    ax.scatter(traj[0, 0], traj[0, 1], label='starting point')
+    ax.scatter(traj[-1,0], traj[-1, 1], color='r', label='ending point')
     ax.set_xlim([-0.2,ROOMWIDTH+0.2])
     ax.set_ylim([-0.2,ROOMLENGTH+0.2])
+    plt.legend(loc='lower center', bbox_to_anchor=(0.5,-0.1))
     plt.show()
 
 def test_sonar(pos):
