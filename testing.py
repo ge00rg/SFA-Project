@@ -1,7 +1,8 @@
 import moving_bat as mb
 import numpy as np
 
-#mb.plot_trajectory()
+#traj = mb.make_trajectory()
+#mb.plot_trajectory(traj)
 
 #sen1=mb.generate_sensors()
 #sen2=mb.generate_sensors(2,'orthogonal')
@@ -18,6 +19,6 @@ import numpy as np
 
 
 #print(mb.sonar((1,1), sen2))
-
-mb.test_sonar((1,1))
+pos = [1,1]
+mb.test_sonar(pos)
 

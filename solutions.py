@@ -7,8 +7,21 @@ def nr_1(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
     mb.plot_trajectory(traj)
 
-def nr_2():
-    pass
+def nr_2(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+
+    n = np.random.randint(1,5)
+    sensors = mb.generate_sensors(n=n)
+    data = mb.generate_data(traj, sensors)
+    
+    for i in range(data.shape[1]):
+        plt.plot(data[:,i], label='sensor {}'.format(i+1))
+
+    plt.xlabel('time')
+    plt.ylabel('distance')
+
+    plt.legend(loc='lower center', bbox_to_anchor=(0.5,-.15), ncol=data.shape[1])
+    plt.show()
 
 def nr_3():
     pass
@@ -30,4 +43,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_1()
+nr_2()
