@@ -243,7 +243,20 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
     
     return distances	
 	
-	
+def generate_data(trajectory, sensors): 
+    '''
+    input: 
+    trajectory= np.array of shape (n_t, 2) holding the bats position (x,y) at each timestep
+    sensors= np.array (2,n) directions of n sensors_p2
+
+    output: 
+    distances=np.array of shape timesteps x sensors 
+    '''
+    distances = np.zeros((trajectory.shape[0], sensors.shape[1]))
+    for t in range(trajectory.shape[0]): 
+        distances[t,:] = sonar(trajectory[t,:], sensors, width=ROOMWIDTH, length=ROOMLENGTH)[:,0]
+
+    return distances 	
 		
 
 
