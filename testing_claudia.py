@@ -16,7 +16,7 @@ def generate_data(trajectory, sensors):
     sensors= np.array (2,n) directions of n sensors_p2
 
     output: 
-    distances=np.array of shape timesteps x sensors x distancces x wallindex
+    distances=np.array of shape timesteps x sensors 
     '''
     distances=np.zeros((trajectory.shape[0], sensors.shape[1]))
     for t in range(trajectory.shape[0]): 
@@ -25,32 +25,15 @@ def generate_data(trajectory, sensors):
 
 
 tr=mb.make_trajectory()
-print(tr)
-print(np.round(tr, decimals=4))
 mb.plot_trajectory(tr)
+
 sen=mb.generate_sensors(n=2, direction='random')
 
 data=generate_data(tr, sen)
-print(data.shape)
 
 flow = (mdp.nodes.PolynomialExpansionNode(1) + mdp.nodes.SFANode())
 flow.train(data)
 slow = flow(data)
-print(slow)
-print(slow.shape)
-#plt.figure()
-#plt.subplot(1,2,1)
-#plt.plot(tr[:,0],tr[:,1] )
-
-#plt.subplot(1,2,2)
-#plt.plot(slow[:,0],slow[:,1])
-
-#plt.show()
-
-#xs=np.arange(0,ROOMLENGTH, 0.001)
-#ys=np.arange(0,ROOMWIDTH, 0.001)
-#xx, yy=meshgrid(xs,ys)
-
 
 mesh=np.zeros((ROOMWIDTH*100, ROOMLENGTH*100))
 
