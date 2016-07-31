@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import moving_bat as mb
 import mdp
 
-def do_sfa(series, poly_exp=7, out_dim=1):
+def do_sfa(series, poly_exp=1, out_dim=1):
     '''
     series: ndarray of shape n_t x n where n_t is the number of timesteps,
         n is the number of variables
@@ -22,3 +22,11 @@ def do_sfa(series, poly_exp=7, out_dim=1):
 
     return flow(series)
 
+def mesh(traj, slow, width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, reso=100):
+    assert(traj.shape[0] == slow.shape[0])
+    mesh = np.zeros((width*reso, length*reso))
+
+    for t in range(traj.shape[0]):
+        mesh[int(reso*(np.round(traj[t,0], decimals=3))), int(reso*(np.round(traj[t,1], decimals=3)))] = slow[t,0]
+    
+    return mesh
