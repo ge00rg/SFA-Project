@@ -23,8 +23,20 @@ def nr_2(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     plt.legend(loc='lower center', bbox_to_anchor=(0.5,-.15), ncol=data.shape[1])
     plt.show()
 
-def nr_3():
-    pass
+def nr_3(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+
+    sensors = mb.generate_sensors(n=2, direction='orthogonal')
+    sen = mb.sensory_data(traj, sensors)
+
+    data = mb.generate_data(traj, sen)
+    slow = sfa.do_sfa(data)
+
+    mesh = sfa.mesh(traj, slow)
+
+    plt.imshow(mesh)
+    plt.show()
 
 def nr_4():
     pass
@@ -43,4 +55,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_2()
+nr_3(quadratic=True)
