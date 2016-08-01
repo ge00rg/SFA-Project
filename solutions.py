@@ -27,16 +27,7 @@ def nr_3(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
 
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
 
-    sensors = mb.generate_sensors(n=2, direction='orthogonal')
-    sen = mb.sensory_data(traj, sensors)
-
-    data = mb.generate_data(traj, sen)
-    slow = sfa.do_sfa(data)
-
-    mesh = sfa.mesh(traj, slow)
-
-    plt.imshow(mesh)
-    plt.show()
+    sfa.mesh(traj)
 
 def nr_4():
     pass
@@ -55,4 +46,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_3(quadratic=True)
+nr_3()

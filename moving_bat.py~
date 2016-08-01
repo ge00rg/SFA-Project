@@ -9,7 +9,7 @@ import geometry as geo
 ROOMWIDTH = 3                    #width of the room
 ROOMLENGTH = 2                   #length of room
 
-T = 1500                         #total number of timesteps
+T = 100000                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
 MAXSPEED = 0.05                  #maximum speed of the bat      
@@ -123,11 +123,12 @@ def plot_trajectory(traj):
             fill=False      # remove background
         )
     )
-    ax.plot(traj[:,0],traj[:,1])
-    ax.scatter(traj[0, 0], traj[0, 1])
-    ax.scatter(traj[-1,0], traj[-1, 1], color='r')
+    ax.plot(traj[:,0],traj[:,1], label='trajectory')
+    ax.scatter(traj[0, 0], traj[0, 1], label='starting point')
+    ax.scatter(traj[-1,0], traj[-1, 1], color='r', label='ending point')
     ax.set_xlim([-0.2,ROOMWIDTH+0.2])
     ax.set_ylim([-0.2,ROOMLENGTH+0.2])
+    plt.legend(loc='lower center', bbox_to_anchor=(0.5,-0.15), ncol=3)
     plt.show()
 
 def test_sonar(pos):
@@ -243,7 +244,20 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
     
     return distances	
 	
-	
+def generate_data(trajectory, sensors): 
+    '''
+    input: 
+    trajectory= np.array of shape (n_t, 2) holding the bats position (x,y) at each timestep
+    sensors= np.array (2,n) directions of n sensors_p2
+
+    output: 
+    distances=np.array of shape timesteps x sensors 
+    '''
+    distances = np.zeros((trajectory.shape[0], sensors.shape[1]))
+    for t in range(trajectory.shape[0]): 
+        distances[t,:] = sonar(trajectory[t,:], sensors, width=ROOMWIDTH, length=ROOMLENGTH)[:,0]
+
+    return distances 	
 		
 
 

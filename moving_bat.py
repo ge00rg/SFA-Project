@@ -9,7 +9,7 @@ import geometry as geo
 ROOMWIDTH = 3                    #width of the room
 ROOMLENGTH = 2                   #length of room
 
-T = 1500                         #total number of timesteps
+T = 100000                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
 MAXSPEED = 0.05                  #maximum speed of the bat      
@@ -257,7 +257,25 @@ def generate_data(trajectory, sensors):
     for t in range(trajectory.shape[0]): 
         distances[t,:] = sonar(trajectory[t,:], sensors, width=ROOMWIDTH, length=ROOMLENGTH)[:,0]
 
-    return distances 	
+    return distances
+
+def generate_grid_data(sensors, width=ROOMWIDTH, length=ROOMLENGTH, spacing=0.1): 
+    '''
+    input: 
+    trajectory= np.array of shape (n_t, 2) holding the bats position (x,y) at each timestep
+    sensors= np.array (2,n) directions of n sensors_p2
+
+    output: 
+    distances=np.array of shape roomwidth/spacing x roomlength/spacing x sensors 
+    '''
+    x = np.arange(0, width, spacing)
+    y = np.arange(0, length, spacing)
+     
+    distances = np.zeros((len(x), len(y), sensors.shape[1]))
+    for i in range(len(x)): 
+        for j in range(len(y)): 
+            distances[i, j,:] = sonar((x[i],y[j]), sensors, width=ROOMWIDTH, length=ROOMLENGTH)[:,0]
+    return x, y, distances 
 		
 
 
