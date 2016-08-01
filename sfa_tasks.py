@@ -13,28 +13,30 @@ def train_sfa(series, poly_exp=1, out_dim=1):
     returns: out_dim x n_t shaped ndarray, containing the first slowest signals
         extracted from series using the SFA algorithm
     '''
-    flow = (mdp.nodes.EtaComputerNode() +
-            mdp.nodes.PolynomialExpansionNode(poly_exp) +
-            mdp.nodes.SFANode(output_dim=out_dim) +
-            mdp.nodes.EtaComputerNode() )
+    flow = (mdp.nodes.PolynomialExpansionNode(poly_exp) +
+            mdp.nodes.SFANode(output_dim=out_dim))
     
     flow.train(series)
 
     return flow
 
 def execute_sfa(flow, grid):
+    '''
+    returns: sfa-traeted grid (dnarray) of the same shape as grid
+    '''
     return flow(grid)
 
-#def mesh(traj, slow, width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, reso=100):
-#    assert(traj.shape[0] == slow.shape[0])
-#    mesh = np.zeros((width*reso, length*reso))
-#
-#    for t in range(traj.shape[0]):
-#            mesh[int(reso*(np.round(traj[t,0], decimals=3))), int(reso*(np.round(traj[t,1], decimals=3)))] = slow[t,0]
-#    
-#    return mesh
+def mesh(traj, n=3, poly_exp=1, out_dim=3, direction='random', spacing=0.1, draw=True):
+    '''
+    traj: ndarray as created by moving_bat.make_trajectory
+    n: int, number of sensors
+    out_dim: int, number of sfa-signals
+    direction: 'random' or 'orthogonal', refers to the direction in which the sensors point
+    spacing: float, space between two points on the used grid
+    draw: bool, wether to draw the resulting mesh
 
-def mesh(traj, n=3, poly_exp=1, out_dim=3, direction='random', width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, spacing=0.1, draw=True):
+    retuns: the whole room treated with the trained sfa, ndarray.
+    '''
     sen = mb.generate_sensors(n=n, direction=direction)
     data = mb.generate_data(traj, sen)
     flow = train_sfa(data, poly_exp=poly_exp, out_dim=out_dim)
@@ -49,8 +51,10 @@ def mesh(traj, n=3, poly_exp=1, out_dim=3, direction='random', width=mb.ROOMWIDT
     slow_reshape = np.reshape(slow, (len(x), len(y), sen.shape[1]))
 
     if draw:
+        rng = np.max([mb.ROOMLENGTH, mb.ROOMWIDTH])
         for i in range(sen.shape[1]):
-            plt.imshow(slow_reshape[:,:,i])
+            plt.imshow(slow_reshape[:,:,i], vmin=-rng, vmax=rng, cmap='plasma')
+            plt.colorbar()
             plt.show()
 
         return slow_reshape
