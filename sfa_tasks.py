@@ -29,13 +29,14 @@ def execute_sfa(flow, grid):
     '''
     return flow(grid)
 
-def mesh(sen, data, flow, spacing=0.1, draw=True):
+def mesh(sen, data, flow, spacing=0.1, ret_dim=5, draw=True):
     '''
     traj: ndarray as created by moving_bat.make_trajectory
     data: nxt dimensional ndarray, n number of sensors, t number of time steps,
         output of moving_bat.generate_data function
     flow: flow as defined in mdp
     spacing: float, space between two points on the used grid
+    ret_dim: int, number of sfa signals returned
     draw: bool, wether to draw the resulting mesh
 
     retuns: the whole room treated with the trained sfa, ndarray.
@@ -45,7 +46,7 @@ def mesh(sen, data, flow, spacing=0.1, draw=True):
     x, y, grid = mb.generate_grid_data(sen, spacing=spacing)
 
     dim_temp = len(x)*len(y)
-    grid_temp = np.reshape(grid, (dim_temp, od))
+    grid_temp = np.reshape(grid, (dim_temp, sen.shape[1]))
 
     slow = execute_sfa(flow, grid_temp)
 
@@ -53,7 +54,7 @@ def mesh(sen, data, flow, spacing=0.1, draw=True):
 
     if draw:
         rng = np.max([mb.ROOMLENGTH, mb.ROOMWIDTH])
-        for i in range(od):
+        for i in range(np.min([od, ret_dim])):
             plt.imshow(slow_reshape[:,:,i], vmin=-rng, vmax=rng, cmap='plasma')
             plt.colorbar()
             plt.show()
