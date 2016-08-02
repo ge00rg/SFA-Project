@@ -24,16 +24,21 @@ def nr_2(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     plt.show()
 
 def nr_3(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
-
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
-    sen = mb.generate_sensors(n=3, direction='random')
+    sen = mb.generate_sensors(n=2, direction='orthogonal')
     data = mb.generate_data(traj, sen)
     flow = sfa.train_sfa(data, poly_exp=1, out_dim=3)
 
     sfa.mesh(sen, data, flow)
 
-def nr_4():
-    pass
+def nr_4(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+    sen = mb.generate_sensors(n=15, direction='random')
+    data = mb.generate_data(traj, sen)
+    flow = sfa.train_sfa(data, poly_exp=1, out_dim=15, whiten=True, svd=False)
+    #todo: at the moment n must be equal to out_dim because of dim-mismatch
+
+    sfa.mesh(sen, data, flow)
 
 def nr_5():
     pass
@@ -49,4 +54,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_3()
+nr_4()
