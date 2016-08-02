@@ -166,7 +166,7 @@ def generate_sensors(n=2, direction='random'):
     if direction == 'orthogonal': 
         if n==2:
             return np.array([[1,0], [0,1]])
-        elif if n==4: 
+        elif n==4: 
             return np.array([[1,0,-1,0], [0,1,0,-1]])
         else: 
             print("Number of sensors must be 2 or 4!")
