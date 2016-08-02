@@ -6,10 +6,10 @@ import matplotlib.patches as patches
 import geometry as geo
 
 ### ### Here be the realm of all variables global ### ###
-ROOMWIDTH = 3                    #width of the room
-ROOMLENGTH = 2                   #length of room
+ROOMWIDTH = 2                    #width of the room
+ROOMLENGTH = 3                   #length of room
 
-T = 100000                         #total number of timesteps
+T = 1000                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
 MAXSPEED = 0.05                  #maximum speed of the bat      
