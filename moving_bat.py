@@ -164,9 +164,13 @@ def generate_sensors(n=2, direction='random'):
     sensors = np.array((n,2))
 	
     if direction == 'orthogonal': 
-        assert(n == 2)
-		
-        return np.array([[1,0], [0,1]])
+        if n==2:
+            return np.array([[1,0], [0,1]])
+        elif if n==4: 
+            return np.array([[1,0,-1,0], [0,1,0,-1]])
+        else: 
+            print("Number of sensors must be 2 or 4!")
+            return None
 		
     elif direction == 'random': 
         angles = np.random.uniform(0, 2*np.pi, n)
