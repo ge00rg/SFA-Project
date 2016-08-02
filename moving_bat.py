@@ -176,6 +176,20 @@ def generate_sensors(n=2, direction='random'):
 		 
     else:
         print('Wrong directions keyword')
+        
+                
+def plot_sensors(sen): 
+    '''
+    sen: 2xn array of sensors 
+    
+    plots the sensors :)
+    '''
+    for i in range(sen.shape[1]):
+        plt.plot([0, sen[0,i]], [0,sen[1,i]])
+    plt.xlim(-2,2)
+    plt.ylim(-2,2)
+    plt.show()        
+        
 		
 def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH): 
     '''
