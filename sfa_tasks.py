@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import moving_bat as mb
 import mdp
 
-def train_sfa(series, poly_exp=1, out_dim=1, whiten=False, svd=False):
+def train_sfa(series, poly_exp=1, out_dim=1, whiten=False, svd=False, ica=False, icadeg=0):
     '''
     series: ndarray of shape n_t x n where n_t is the number of timesteps,
         n is the number of variables
@@ -18,6 +18,9 @@ def train_sfa(series, poly_exp=1, out_dim=1, whiten=False, svd=False):
 
     if whiten:
         flow.insert(0,mdp.nodes.WhiteningNode(svd=svd, reduce=True))
+
+    if ica:
+        flow.append(mdp.nodes.CuBICANode(input_dim=icadeg))
     
     flow.train(series)
 

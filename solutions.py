@@ -40,10 +40,22 @@ def nr_4(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
 
     sfa.mesh(sen, data, flow)
 
-def nr_5():
-    pass
+def nr_5(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+    sen = mb.generate_sensors()
+    data = mb.generate_data(traj, sen)
+    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True)
 
-def nr_6():
+    sfa.mesh(sen, data, flow)
+
+def nr_6(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+    sen = mb.generate_sensors()
+    data = mb.generate_data(traj, sen)
+    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True, ica=True, icadeg=None)
+
+    sfa.mesh(sen, data, flow)
+
     pass
 
 def nr_7():
@@ -54,4 +66,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_4()
+nr_6()
