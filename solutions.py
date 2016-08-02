@@ -26,8 +26,11 @@ def nr_2(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
 def nr_3(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
 
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+    sen = mb.generate_sensors(n=3, direction='random')
+    data = mb.generate_data(traj, sen)
+    flow = sfa.train_sfa(data, poly_exp=1, out_dim=3)
 
-    sfa.mesh(traj)
+    sfa.mesh(sen, data, flow)
 
 def nr_4():
     pass

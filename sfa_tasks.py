@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import moving_bat as mb
 import mdp
 
-def train_sfa(series, poly_exp=1, out_dim=1):
+def train_sfa(series, poly_exp=1, out_dim=1, whiten=False):
     '''
     series: ndarray of shape n_t x n where n_t is the number of timesteps,
         n is the number of variables
@@ -15,6 +15,9 @@ def train_sfa(series, poly_exp=1, out_dim=1):
     '''
     flow = (mdp.nodes.PolynomialExpansionNode(poly_exp) +
             mdp.nodes.SFANode(output_dim=out_dim))
+
+    if whiten:
+        flow.insert(0,mdp.nodes.WhiteningNode(svd=False, reduce=True))
     
     flow.train(series)
 
@@ -26,21 +29,17 @@ def execute_sfa(flow, grid):
     '''
     return flow(grid)
 
-def mesh(traj, n=3, poly_exp=1, out_dim=3, direction='random', spacing=0.1, draw=True):
+def mesh(sen, data, flow, spacing=0.1, draw=True):
     '''
     traj: ndarray as created by moving_bat.make_trajectory
-    n: int, number of sensors
-    out_dim: int, number of sfa-signals
-    direction: 'random' or 'orthogonal', refers to the direction in which the sensors point
+    data: nxt dimensional ndarray, n number of sensors, t number of time steps,
+        output of moving_bat.generate_data function
+    flow: flow as defined in mdp
     spacing: float, space between two points on the used grid
     draw: bool, wether to draw the resulting mesh
 
     retuns: the whole room treated with the trained sfa, ndarray.
     '''
-    sen = mb.generate_sensors(n=n, direction=direction)
-    data = mb.generate_data(traj, sen)
-    flow = train_sfa(data, poly_exp=poly_exp, out_dim=out_dim)
-    
     x, y, grid = mb.generate_grid_data(sen, spacing=spacing)
 
     dim_temp = len(x)*len(y)
