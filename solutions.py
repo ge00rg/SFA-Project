@@ -32,81 +32,7 @@ def nr_3(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     flow = sfa.train_sfa(data, poly_exp=1)
 
     sfa.mesh(sen, data, flow)
-    
-def nr_3_plot(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
-    sen_numb=[3,5,15]
-    traj = mb.make_trajectory(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=minspeed, maxspeed=maxspeed)
-    plt.figure(figsize=(9,9))
-    for i,s in enumerate(sen_numb): 
-        sen = mb.generate_sensors(n=s, direction='random')
-        data = mb.generate_data(traj, sen, width=SQUARE_SIDE, length=SQUARE_SIDE)
-        flow = sfa.train_sfa(data, poly_exp=1, whiten=True)
-        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, width=SQUARE_SIDE, length=SQUARE_SIDE, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
-
-       
-        plt.subplot(3,3,i*3+1)
-        for j in range(sen.shape[1]):
-            plt.plot([0, sen[0,j]], [0,sen[1,j]])
-        plt.xlim(-2,2)
-        plt.ylim(-2,2)
-            
-        plt.subplot(3,3,i*3+2)
-        rng = np.max([length, width])
-        yticks = np.arange(0, width, 1)
-        xticks = np.arange(0, length, 1) 
-        plt.xticks(np.arange(0, length*10,10),xticks)
-        plt.yticks(np.arange(0, width*10,10),yticks)
-        plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
-        
-            
-        plt.subplot(3,3,i*3+3)
-        rng = np.max([length, width])
-        yticks = np.arange(0, width, 1)
-        xticks = np.arange(0, length, 1)
-        plt.xticks(np.arange(0, length*10,10),xticks)
-        plt.yticks(np.arange(0, width*10,10),yticks)
-        plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
-    plt.show()
-
-def nr_3_plot_rect(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
-    sen_numb=[3,5,15]
-    traj = mb.make_trajectory()
-    plt.figure(figsize=(9,9))
-    for i,s in enumerate(sen_numb): 
-        sen = mb.generate_sensors(n=s, direction='random')
-        data = mb.generate_data(traj, sen)
-        flow = sfa.train_sfa(data, poly_exp=1, whiten=True)
-        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
-
-       
-        plt.subplot(3,3,i*3+1)
-        for j in range(sen.shape[1]):
-            plt.plot([0, sen[0,j]], [0,sen[1,j]])
-        plt.xlim(-2,2)
-        plt.ylim(-2,2)
-            
-        plt.subplot(3,3,i*3+2)
-        rng = np.max([length, width])
-        yticks = np.arange(0, width, 1)
-        xticks = np.arange(0, length, 1) 
-        plt.xticks(np.arange(0, length*10,10),xticks)
-        plt.yticks(np.arange(0, width*10,10),yticks)
-        plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
-        
-            
-        plt.subplot(3,3,i*3+3)
-        rng = np.max([length, width])
-        yticks = np.arange(0, width, 1)
-        xticks = np.arange(0, length, 1)
-        plt.xticks(np.arange(0, length*10,10),xticks)
-        plt.yticks(np.arange(0, width*10,10),yticks)
-        plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
-    plt.show()
-
+   
 
 def nr_4(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
@@ -117,6 +43,60 @@ def nr_4(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     #todo: at the moment n must be equal to out_dim because of dim-mismatch
 
     sfa.mesh(sen, data, flow)
+    
+def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, savestring=" "):
+    mb.ROOMLENGTH=7
+    mb.ROOMWIDTH=7
+    sen_numb=[5, 11, 23]
+    traj = mb.make_trajectory(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED)
+    plt.figure(figsize=(9,9))
+    for i,s in enumerate(sen_numb): 
+        sen = mb.generate_sensors(n=s, direction='random')
+        data = mb.generate_data(traj, sen, width=SQUARE_SIDE, length=SQUARE_SIDE)
+        flow = sfa.train_sfa(data, poly_exp=1, whiten=True, svd=True)
+        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, width=SQUARE_SIDE, length=SQUARE_SIDE, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
+       
+        plt.subplot(3,3,i*3+1)
+        for j in range(sen.shape[1]):
+            plt.plot([0, sen[0,j]], [0,sen[1,j]])
+        plt.xlim(-2,2)
+        plt.ylim(-2,2)
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.tick_params(axis='y', which='both', bottom='off', top='off',labelbottom='off') 
+            
+        plt.subplot(3,3,i*3+2)
+        rng = np.max([length, width])
+        yticks = np.arange(0, width, 1)
+        xticks = np.arange(0, length, 1) 
+        plt.xticks(np.arange(0, length*10,10),xticks)
+        plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        
+            
+        plt.subplot(3,3,i*3+3)
+        rng = np.max([length, width])
+        yticks = np.arange(0, width, 1)
+        xticks = np.arange(0, length, 1)
+        plt.xticks(np.arange(0, length*10,10),xticks)
+        plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        
+#        plt.subplot(3,4,i*4+4)
+#        rng = np.max([length, width])
+#        yticks = np.arange(0, width, 1)
+#        xticks = np.arange(0, length, 1)
+#        plt.xticks(np.arange(0, length*10,10),xticks)
+#        plt.yticks(np.arange(0, width*10,10),yticks)
+#        plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
+#        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+    plt.tight_layout()
+    plt.savefig(savestring)
+
+
 
 def nr_5(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
@@ -131,6 +111,21 @@ def nr_5(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True)
     fig_title="sen_3_pol_exp_7"
     sfa.mesh(sen, data, flow, savestring=fig_title)
+    
+def nr_5_iterable(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
+#    sen = mb.generate_sensors(n=3, direction="random")
+#    f=open("sensors.txt", "w")
+#    f.write(str(sen))
+#    f.close()
+    sen=np.array([[-0.95377798, -0.4048993,  -0.57044942],
+ [ 0.30051217, -0.91436128, -0.82133274]])
+    mb.plot_sensors(sen)
+    data = mb.generate_data(traj, sen)
+    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True)
+    fig_title="sen_3_pol_exp_7"
+    sfa.mesh(sen, data, flow, savestring=fig_title)
+
 
 def nr_6(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
@@ -150,4 +145,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_3()
+nr_4_plot_square(savestring="sen_3_7_23_rep")

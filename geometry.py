@@ -50,11 +50,7 @@ def calculateYAxisIntersect(p, m):
 def getIntersectPoint(p1, p2, p3, p4):
     m1 = calculateGradient(p1, p2)
     m2 = calculateGradient(p3, p4)
-    print(m1,m2)
-    
-    if (m1 is None and m2 is None): 
-    	return None          
-        
+       
     # See if the the lines are parallel
     if (m1 != m2):
         # Not parallel
@@ -65,7 +61,7 @@ def getIntersectPoint(p1, p2, p3, p4):
             b1 = calculateYAxisIntersect(p1, m1)
             b2 = calculateYAxisIntersect(p3, m2)   
             x = (b2 - b1) / (m1 - m2)       
-            y = (m1 * x) + b1
+            y = (m1 * x) + b1           
         else:
             # Line 1 is vertical so use line 2's values
             if (m1 is None):

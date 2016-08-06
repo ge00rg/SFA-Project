@@ -6,14 +6,14 @@ import matplotlib.patches as patches
 import geometry as geo
 
 ### ### Here be the realm of all variables global ### ###
-ROOMWIDTH = 2                    #width of the room
-ROOMLENGTH = 3                   #length of room
+ROOMWIDTH = 7                    #width of the room
+ROOMLENGTH = 7                   #length of room
 
-T = 1000                         #total number of timesteps
+T = 10000                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
 
-MAXSPEED = 0.05                  #maximum speed of the bat      
-MINSPEED = 0.005                 #minimum speed of the bat
+MAXSPEED = 0.2                  #maximum speed of the bat      
+MINSPEED = 0.02                 #minimum speed of the bat
 TRDIST = 0.05                      #distance at which the mirroring is triggered. Corrently not in use
 
 WALLSDICT = {0:'south', 1:'east', 2:'north', 3:'west', 'south':0, 'east':1, 'north':2, 'west':3}
@@ -262,7 +262,7 @@ def sonar(pos, sensors, width=ROOMWIDTH, length=ROOMLENGTH):
     
     return distances	
 	
-def generate_data(trajectory, sensors): 
+def generate_data(trajectory, sensors, width=ROOMWIDTH, length=ROOMLENGTH ): 
     '''
     input: 
     trajectory= np.array of shape (n_t, 2) holding the bats position (x,y) at each timestep
