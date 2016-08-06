@@ -61,29 +61,30 @@ def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED
             plt.plot([0, sen[0,j]], [0,sen[1,j]])
         plt.xlim(-2,2)
         plt.ylim(-2,2)
-        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
-        plt.tick_params(axis='y', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.axis("off")
+        #plt.tick_params(axis='both', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.tick_params(axis='y', which='both', bottom='off', top='off',labelbottom='off') 
             
         plt.subplot(3,3,i*3+2)
         rng = np.max([length, width])
         yticks = np.arange(0, width, 1)
         xticks = np.arange(0, length, 1) 
-        plt.xticks(np.arange(0, length*10,10),xticks)
+        #plt.xticks(np.arange(0, length*10,10),xticks)
         plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
         plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
             
         plt.subplot(3,3,i*3+3)
         rng = np.max([length, width])
         yticks = np.arange(0, width, 1)
         xticks = np.arange(0, length, 1)
-        plt.xticks(np.arange(0, length*10,10),xticks)
+        #plt.xticks(np.arange(0, length*10,10),xticks)
         plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
         plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
-        plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
 #        plt.subplot(3,4,i*4+4)
 #        rng = np.max([length, width])
@@ -100,31 +101,68 @@ def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED
 
 def nr_5(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
-#    sen = mb.generate_sensors(n=3, direction="random")
-#    f=open("sensors.txt", "w")
-#    f.write(str(sen))
-#    f.close()
-    sen=np.array([[-0.95377798, -0.4048993,  -0.57044942],
- [ 0.30051217, -0.91436128, -0.82133274]])
+    sen = mb.generate_sensors(n=3, direction="random")
     mb.plot_sensors(sen)
     data = mb.generate_data(traj, sen)
-    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True)
-    fig_title="sen_3_pol_exp_7"
-    sfa.mesh(sen, data, flow, savestring=fig_title)
+    flow = sfa.train_sfa(data, poly_exp=3, whiten=True, svd=True)
+    #fig_title="sen_20_pol_exp_7"
+    sfa.mesh(sen, data, flow)
     
-def nr_5_iterable(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, savestring=" "):
+    mb.ROOMLENGTH=7
+    mb.ROOMWIDTH=7
+    poly_numb=[3, 5, 7]
+        
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
-#    sen = mb.generate_sensors(n=3, direction="random")
-#    f=open("sensors.txt", "w")
-#    f.write(str(sen))
-#    f.close()
-    sen=np.array([[-0.95377798, -0.4048993,  -0.57044942],
- [ 0.30051217, -0.91436128, -0.82133274]])
-    mb.plot_sensors(sen)
-    data = mb.generate_data(traj, sen)
-    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True)
-    fig_title="sen_3_pol_exp_7"
-    sfa.mesh(sen, data, flow, savestring=fig_title)
+    sen = mb.generate_sensors(n=10, direction="random")
+    data = mb.generate_data(traj, sen, width=width, length=width)
+    
+    plt.figure(figsize=(9,9))    
+    for i,p in enumerate(poly_numb): 
+        print(p)
+
+        flow = sfa.train_sfa(data, poly_exp=p, whiten=True, svd=True)
+        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, width=SQUARE_SIDE, length=SQUARE_SIDE, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
+       
+        plt.subplot(3,3,i*3+1)
+        plt.title("degree= "+str(p)+ " component= 1", fontsize=10)
+        rng = np.max([length, width])
+        yticks = np.arange(0, width, 1)
+        xticks = np.arange(0, length, 1) 
+        plt.xticks(np.arange(0, length*10,10),xticks)
+        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        
+        plt.subplot(3,3,i*3+2)
+        plt.title("degree= "+str(p)+ " component= 2", fontsize=10)
+        rng = np.max([length, width])
+        yticks = np.arange(0, width, 1)
+        xticks = np.arange(0, length, 1) 
+        plt.xticks(np.arange(0, length*10,10),xticks)
+        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
+        
+            
+        plt.subplot(3,3,i*3+3)
+        plt.title("degree= "+str(p)+ " component= 3", fontsize=10)
+        rng = np.max([length, width])
+        yticks = np.arange(0, width, 1)
+        xticks = np.arange(0, length, 1)
+        plt.xticks(np.arange(0, length*10,10),xticks)
+        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.imshow(grid_plot[:,:,2], interpolation='none', origin='lower')
+        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        
+
+    plt.tight_layout()
+    plt.savefig(savestring)
+
+   
+    
 
 
 def nr_6(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
@@ -145,4 +183,4 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_4_plot_square(savestring="sen_3_7_23_rep")
+nr_5_iterable(savestring="sen_10_rand_pol_exp_3_5_7")
