@@ -51,7 +51,7 @@ def execute_ica(flow, grid):
     '''
     return flow(grid)
 
-def mesh(sen, data, flow, spacing=0.1, ret_dim=5, ica=False, icadim=2, draw=True):
+def mesh(sen, data, flow, spacing=0.1, width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, ret_dim=5, ica=False, icadim=2, draw=True, save=False, savestring=''):
     '''
     traj: ndarray as created by moving_bat.make_trajectory
     data: nxt dimensional ndarray, n number of sensors, t number of time steps,
@@ -64,7 +64,7 @@ def mesh(sen, data, flow, spacing=0.1, ret_dim=5, ica=False, icadim=2, draw=True
     retuns: the whole room treated with the trained sfa, ndarray.
     '''
     od = flow[-1].get_output_dim()
-    x, y, grid = mb.generate_grid_data(sen, spacing=spacing)
+    x, y, grid = mb.generate_grid_data(sen, width, length, spacing=spacing)
 
     dim_temp = len(x)*len(y)
     grid_temp = np.reshape(grid, (dim_temp, sen.shape[1]))
@@ -87,6 +87,11 @@ def mesh(sen, data, flow, spacing=0.1, ret_dim=5, ica=False, icadim=2, draw=True
             plt.yticks(np.arange(0, mb.ROOMWIDTH*10,10),yticks)
             plt.imshow(slow_reshape[:,:,i], interpolation='none', origin='lower')
             plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
-            plt.show()
-
-        return slow_reshape
+            if save: 
+                title=savestring+"_"+str(i)
+                plt.savefig(title)
+            else: 
+                plt.show()
+                
+        
+    return slow_reshape
