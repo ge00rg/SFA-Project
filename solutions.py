@@ -45,8 +45,8 @@ def nr_4(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     sfa.mesh(sen, data, flow)
     
 def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, savestring=" "):
-    mb.ROOMLENGTH=7
-    mb.ROOMWIDTH=7
+#    mb.ROOMLENGTH=7
+#    mb.ROOMWIDTH=7
     sen_numb=[5, 11, 23]
     traj = mb.make_trajectory(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED)
     plt.figure(figsize=(9,9))
@@ -62,6 +62,7 @@ def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED
         plt.xlim(-2,2)
         plt.ylim(-2,2)
         plt.axis("off")
+        plt.title("sensor directions")
         #plt.tick_params(axis='both', which='both', bottom='off', top='off',labelbottom='off') 
         #plt.tick_params(axis='y', which='both', bottom='off', top='off',labelbottom='off') 
             
@@ -73,6 +74,7 @@ def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED
         plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
         plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.title("component= 1")
         #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
             
@@ -84,6 +86,7 @@ def nr_4_plot_square(width=SQUARE_SIDE, length=SQUARE_SIDE, minspeed=mb.MINSPEED
         plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
         plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        plt.title("component= 1")
         #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
 #        plt.subplot(3,4,i*4+4)
@@ -108,21 +111,22 @@ def nr_5(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspee
     #fig_title="sen_20_pol_exp_7"
     sfa.mesh(sen, data, flow)
     
-def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, savestring=" "):
-    mb.ROOMLENGTH=7
-    mb.ROOMWIDTH=7
+def nr_5_iterable(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, savestring=" "):
     poly_numb=[3, 5, 7]
+    print(width, length)
+    print(mb.ROOMWIDTH, mb.ROOMLENGTH)
         
-    traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
-    sen = mb.generate_sensors(n=10, direction="random")
-    data = mb.generate_data(traj, sen, width=width, length=width)
+    traj = mb.make_trajectory()
+    sen = mb.generate_sensors(n=5, direction="random")
+    data = mb.generate_data(traj, sen)
     
-    plt.figure(figsize=(9,9))    
+    plt.figure(figsize=(15,6))    
     for i,p in enumerate(poly_numb): 
         print(p)
 
         flow = sfa.train_sfa(data, poly_exp=p, whiten=True, svd=True)
-        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, width=SQUARE_SIDE, length=SQUARE_SIDE, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
+        grid_plot= sfa.mesh(sen, data, flow, spacing=0.1, width=width, length=length, ret_dim=5, ica=False, icadim=2, draw=False, save=False, savestring='')
+        print(grid_plot.shape)
        
         plt.subplot(3,3,i*3+1)
         plt.title("degree= "+str(p)+ " component= 1", fontsize=10)
@@ -130,9 +134,9 @@ def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED,
         yticks = np.arange(0, width, 1)
         xticks = np.arange(0, length, 1) 
         plt.xticks(np.arange(0, length*10,10),xticks)
-        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,0], interpolation='none', origin='lower')
-        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
         #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
         plt.subplot(3,3,i*3+2)
@@ -141,9 +145,9 @@ def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED,
         yticks = np.arange(0, width, 1)
         xticks = np.arange(0, length, 1) 
         plt.xticks(np.arange(0, length*10,10),xticks)
-        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,1], interpolation='none', origin='lower')
-        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
         #plt.colorbar(fraction=0.046, pad=0.04, orientation='horizontal')
         
             
@@ -153,9 +157,9 @@ def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED,
         yticks = np.arange(0, width, 1)
         xticks = np.arange(0, length, 1)
         plt.xticks(np.arange(0, length*10,10),xticks)
-        #plt.yticks(np.arange(0, width*10,10),yticks)
+        plt.yticks(np.arange(0, width*10,10),yticks)
         plt.imshow(grid_plot[:,:,2], interpolation='none', origin='lower')
-        plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
+        #plt.tick_params(axis='x', which='both', bottom='off', top='off',labelbottom='off') 
         
 
     plt.tight_layout()
@@ -163,17 +167,15 @@ def nr_5_iterable(width=7, length=7, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED,
 
    
     
-
-
-def nr_6(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED):
+def nr_6(width=mb.ROOMWIDTH, length=mb.ROOMLENGTH, minspeed=mb.MINSPEED, maxspeed=mb.MAXSPEED, out=3, savestring=" "):
     traj = mb.make_trajectory(width=width, length=length, minspeed=minspeed, maxspeed=maxspeed)
-    sen = mb.generate_sensors()
+    sen = mb.generate_sensors(n=5, direction="random")
     data = mb.generate_data(traj, sen)
-    flow = sfa.train_sfa(data, poly_exp=7, whiten=True, svd=True, ica=True, icadeg=None)
+    flow = sfa.train_sfa_with_ica(data, poly_exp=11, o_dim=out)
+    sfa.do_sfa_ica(sen, flow, save=True, savestring=savestring) 
 
-    sfa.mesh(sen, data, flow)
+    
 
-    pass
 
 def nr_7():
     pass
@@ -183,4 +185,7 @@ def nr_8():
 
 ############ testing grounds #################
 
-nr_5_iterable(savestring="sen_10_rand_pol_exp_3_5_7")
+nr_6(out=4, savestring="ICA_sen_5_rand_poly_11_out_3_rect")
+
+
+

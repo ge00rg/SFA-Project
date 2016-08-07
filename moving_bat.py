@@ -6,8 +6,8 @@ import matplotlib.patches as patches
 import geometry as geo
 
 ### ### Here be the realm of all variables global ### ###
-ROOMWIDTH = 7                    #width of the room
-ROOMLENGTH = 7                   #length of room
+ROOMWIDTH = 5                    #width of the room
+ROOMLENGTH = 10                   #length of room
 
 T = 10000                         #total number of timesteps
 DIRINTERVAL = 20                 #every DIRINTERVAL timesteps, a new direction vector is chosen
